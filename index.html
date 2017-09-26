@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
 <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script src="/socket.io/socket.io.js"></script>
 </head>
 
 
@@ -109,8 +109,6 @@
 	var listPageDidCreate = false;
 	var isCaller = false;
 	
-	socket.on.uri ="http://192.168.200.119:3000";
-	
 	socket.on('register succeed', function(msg){
 	  window.socket = socket;
 	  Cookies.set('uuid', uuid);
@@ -192,8 +190,8 @@
     </script>
     
 	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-    <script src="public/js/main.js"></script>
-    <script src="public/js/js.cookie.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/js.cookie.js"></script>
     
 </body>
 </html>
