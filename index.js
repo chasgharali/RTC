@@ -109,9 +109,9 @@ var server = https.listen(3000, function(){
 });
 
 
-var server = http.listen(3000, function(){
-  var host = server.address().address
-  var port = server.address().port
+var server2 = http.listen(3000, function(){
+  var host = server2.address().address
+  var port = server2.address().port
   console.log('listening on https://%s:%s', host, port);
 });
 
