@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var https = require('https').Server(app);
+var http = require('http').Server(app);
+
 const fs = require('fs');
 
 const options = {
@@ -9,7 +11,7 @@ const options = {
   passphrase: 'selfsignedssl'
 };
 
-var io = require('socket.io')(https);
+var io = require('socket.io')(http);
 var users = [];
 var index = 0;
 
@@ -105,4 +107,12 @@ var server = https.listen(3000, function(){
   var port = server.address().port
   console.log('listening on https://%s:%s', host, port);
 });
+
+
+var server = http.listen(3000, function(){
+  var host = server.address().address
+  var port = server.address().port
+  console.log('listening on https://%s:%s', host, port);
+});
+
 
