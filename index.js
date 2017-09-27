@@ -7,6 +7,8 @@ var fs = require('fs');
 var privateKey  = fs.readFileSync('../../../../etc/ssl/private/nodejs-selfsigned.key', 'utf8');
 var certificate = fs.readFileSync('../../../../etc/ssl/certs/nodejs-selfsigned.crt', 'utf8');
 
+console.log("private Key: " + privateKey );
+
 var credentials = {key: privateKey, cert: certificate};
 
 //var http = require('http').Server(app);
@@ -111,7 +113,7 @@ io.on('connection', function(socket){
 //var httpsServer = https.createServer(credentials, app);
 
 //httpServer.listen(8080);
-var server = https.listen(8443 , function(){
+var server = https.listen(443 , function(){
   var host = server.address().address
   var port = server.address().port
   console.log('listening on http://%s:%s', host, port);
