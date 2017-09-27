@@ -104,16 +104,21 @@ io.on('connection', function(socket){
   
 });
 
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+//var httpServer = http.createServer(app);
+//var httpsServer = https.createServer(credentials, app);
 
-httpServer.listen(8080);
-httpsServer.listen(8443);
+//httpServer.listen(8080);
+//httpsServer.listen(8443);
 
-/*
+
 var server = http.listen(3000, function(){
   var host = server.address().address
   var port = server.address().port
   console.log('listening on http://%s:%s', host, port);
 });
-*/
+
+var server = https.listen(8443, function(){
+  var host = server.address().address
+  var port = server.address().port
+  console.log('listening on https://%s:%s', host, port);
+});
