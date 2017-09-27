@@ -1,9 +1,21 @@
-var express = require('express');
-var app = express();
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var users = [];
 var index = 0;
+var fs = require('fs');
+var https = require('https');
+
+var privateKey  = fs.readFileSync('/etc/ssl/private/nodejs-selfsigned.key', 'utf8');
+var certificate = fs.readFileSync('/etc/ssl/certs/nodejs-selfsigned.crt', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
+var express = require('express');
+var app = express();
+
+// your express configuration here
+
+
 
 app.use(express.static(__dirname + '/public'));
 
@@ -92,9 +104,16 @@ io.on('connection', function(socket){
   
 });
 
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
+
+httpServer.listen(8080);
+httpsServer.listen(8443);
+
+/*
 var server = http.listen(3000, function(){
   var host = server.address().address
   var port = server.address().port
   console.log('listening on http://%s:%s', host, port);
 });
-
+*/
