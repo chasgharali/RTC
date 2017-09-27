@@ -1,17 +1,20 @@
+var express = require('express');
+var app = express();
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var users = [];
-var index = 0;
+var https = require('https').Server(app);
+
 var fs = require('fs');
-var https = require('https');
-
 var privateKey  = fs.readFileSync('../../../../etc/ssl/private/nodejs-selfsigned.key', 'utf8');
 var certificate = fs.readFileSync('../../../../etc/ssl/certs/nodejs-selfsigned.crt', 'utf8');
 
 var credentials = {key: privateKey, cert: certificate};
-var express = require('express');
-var app = express();
+
+//var http = require('http').Server(app);
+var io = require('socket.io')(https);
+var users = [];
+var index = 0;
+
+
 
 // your express configuration here
 
@@ -105,10 +108,10 @@ io.on('connection', function(socket){
 });
 
 //var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
+//var httpsServer = https.createServer(credentials, app);
 
 //httpServer.listen(8080);
-httpsServer.listen(443 , function(){
+httpsServer.listen(8443 , function(){
   var host = httpsServer.address().address
   var port = httpsServer.address().port
   console.log('listening on http://%s:%s', host, port);
