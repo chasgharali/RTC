@@ -1,20 +1,14 @@
+const https = require('https');
+const fs = require('fs');
 var express = require('express');
 var app = express();
 
-var https = require('https').Server(app);
-var fs = require('fs');
-
-
-
 const options = {
-  key: fs.readFileSync('../../../../etc/ssl/private/nodejs-selfsigned.key'),
-  cert: fs.readFileSync('../../../../etc/ssl/certs/nodejs-selfsigned.crt')
+  key: fs.readFileSync('../../../../etc/ssl/selfsigned/server-selfsigned.key'),
+  cert: fs.readFileSync('../../../../etc/ssl/selfsigned/server-selfsigned.crt'),
+    passphrase: 'selfsignedssl'
 };
 
-console.log("Cert : " + options );
-
-
-//var http = require('http').Server(app);
 var io = require('socket.io')(https);
 var users = [];
 var index = 0;
@@ -112,30 +106,10 @@ io.on('connection', function(socket){
   
 });
 
-//var httpServer = http.createServer(app);
-//var httpsServer = https.createServer(credentials, app);
-
-
+https.Server(app);
 
 https.createServer(options, (req, res) => {
 	console.log("https server created");
   res.writeHead(200);
   res.end('hello world\n');
 }).listen(3000);
-
-/*
-//httpServer.listen(8080);
-var server = https.listen(443 , function(){
-  var host = server.address().address
-  var port = server.address().port
-  console.log('listening on http://%s:%s', host, port);
-});
-
-
-var server = http.listen(3000, function(){
-  var host = server.address().address
-  var port = server.address().port
-  console.log('listening on http://%s:%s', host, port);
-});
-
-*/
