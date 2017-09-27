@@ -1,23 +1,17 @@
-const https = require('https');
-const fs = require('fs');
 var express = require('express');
 var app = express();
+var https = require('https').Server(app);
+const fs = require('fs');
 
 const options = {
   key: fs.readFileSync('../../../../etc/ssl/selfsigned/server-selfsigned.key'),
   cert: fs.readFileSync('../../../../etc/ssl/selfsigned/server-selfsigned.crt'),
-    passphrase: 'selfsignedssl'
+  passphrase: 'selfsignedssl'
 };
 
 var io = require('socket.io')(https);
 var users = [];
 var index = 0;
-
-
-
-// your express configuration here
-
-
 
 app.use(express.static(__dirname + '/public'));
 
@@ -106,10 +100,9 @@ io.on('connection', function(socket){
   
 });
 
-https.Server(app);
+var server = https.listen(3000, function(){
+  var host = server.address().address
+  var port = server.address().port
+  console.log('listening on https://%s:%s', host, port);
+});
 
-https.createServer(options, (req, res) => {
-	console.log("https server created");
-  res.writeHead(200);
-  res.end('hello world\n');
-}).listen(3000);
