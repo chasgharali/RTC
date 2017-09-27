@@ -112,8 +112,8 @@ io.on('connection', function(socket){
 
 //httpServer.listen(8080);
 var server = https.listen(8443 , function(){
-  var host = httpsServer.address().address
-  var port = httpsServer.address().port
+  var host = server.address().address
+  var port = server.address().port
   console.log('listening on http://%s:%s', host, port);
 });
 
