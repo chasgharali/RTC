@@ -1,3 +1,18 @@
+
+
+var https = require('https');
+var fs = require('fs');
+
+var options = {
+  key: fs.readFileSync('../ssl/key.pem'),
+  cert: fs.readFileSync('../ssl/cert.pem')
+};
+
+var a = https.createServer(options, function (req, res) {
+  res.writeHead(200);
+  res.end("hello world\n");
+}).listen(3000);
+
 /*const https = require('https');
 const fs = require('fs');
 
@@ -12,114 +27,3 @@ https.createServer(options, (req, res) => {
   res.writeHead(200);
   res.end('hello world\n');
 }).listen(3000);*/
-
-
-var express = require('express');
-var https = require('https');
-var fs = require('fs');
-
-var options = {
-      ca: fs.readFileSync('../../../../etc/ssl/selfsigned/ca-selfsigned.crt'),
-      cert: fs.readFileSync('../../../../etc/ssl/selfsigned/server-selfsigned.crt'),
-      key: fs.readFileSync('../../../../etc/ssl/selfsigned/server-selfsigned.key')
-};
-
-app = express()
-
-
-var io = require('socket.io')(https);
-var users = [];
-var index = 0;
-
-app.use(express.static(__dirname + '/public'));
-
-function findIndexByUID(uid){
-  var i;
-  for(i = 0; i < users.length; i++){
-    if(users[i].id == uid) break;
-  }
-
-  if(i == users.length) return -1;
-  
-  return i;
-}
-
-function findUserByUID(uid){
-  var index = findIndexByUID(uid);
-  if(index == -1) return null;
-  
-  return users[index];
-}
-
-
-function censor(key, value) {
-  if (key == 'socketid') {
-    return undefined;
-  }
-  return value;
-}
-
-
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
-});
-
-app.get('/webrtc', function(req, res){
-  console.log(__dirname);
-  res.sendFile(__dirname + '/webrtc.html');
-});
-
-app.get('/listUsers', function(req, res){
-  res.end(JSON.stringify(users, censor));
-});
-
-
-
-io.on('connection', function(socket){
-  var peer;
-  console.log('a user connected');
-  
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-    var index = users.indexOf(peer);
-    if(index != -1){
-      var usr = users[index];
-      users.splice(index, 1);
-      socket.broadcast.emit('user leave', {id: usr.id, name:usr.name});
-    }
-  });
-  
-  socket.on('chat message', function(msg){
-    if(msg.to == 'all'){
-      socket.broadcast.emit('chat message', msg);
-    }else{
-      var target = findUserByUID(msg.to);
-      if(target){
-        socket.broadcast.to(target.socketid).emit('chat message', msg);
-        //socket_to.emit("chat message", msg);
-      }else{
-        socket.broadcast.emit("chat message", msg);
-      }
-    }
-    
-  });
-  
-  socket.on('register', function(info){
-
-    if(findUserByUID(info.uuid) == null){
-      var usr = {id: info.uuid, name: info.name, socketid: socket.id};
-      users.push(usr);
-      socket.emit('register succeed', {id: info.uuid, name: info.name});
-      socket.broadcast.emit('new user', {id: info.uuid, name: info.name});
-      peer = usr;
-    }
-  
-  });
-  
-});
-
-var server = https.createServer(options, app);
-
-server.listen(3000, function(){
-        console.log("server running at https://IP_ADDRESS:3000/")
-});
