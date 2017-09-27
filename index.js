@@ -4,13 +4,14 @@ var app = express();
 var https = require('https').Server(app);
 var fs = require('fs');
 
-console.log("private Key: " + privateKey );
+
 
 const options = {
   key: fs.readFileSync('../../../../etc/ssl/private/nodejs-selfsigned.key'),
   cert: fs.readFileSync('../../../../etc/ssl/certs/nodejs-selfsigned.crt')
 };
 
+console.log("Cert : " + options );
 
 
 //var http = require('http').Server(app);
