@@ -108,9 +108,9 @@ io.on('connection', function(socket){
 var httpsServer = https.createServer(credentials, app);
 
 //httpServer.listen(8080);
-httpsServer.listen(8443 , function(){
-  var host = server.address().address
-  var port = server.address().port
+httpsServer.listen(443 , function(){
+  var host = httpsServer.address().address
+  var port = httpsServer.address().port
   console.log('listening on http://%s:%s', host, port);
 });
 
